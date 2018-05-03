@@ -11,39 +11,21 @@ class Server {
     /**
      * Inicializa o Servidor e as Rotas da aplicação.
      */
-    initRoutes() {
+    initRoutes(routers) {
         return new Promise((resolve, reject) => {
             try {
+                // Cria o servidor Restify
                 this.application = restify.createServer({
                     name: 'meat-api',
                     version: '1.0.0'
                 });
+                // Instala plugins que serão utilizada por todas as rotas.
                 this.application.use(restify.plugins.queryParser());
-                // routes
-                this.application.get('/info', [
-                    (req, resp, next) => {
-                        if (req.userAgent() && req.userAgent().includes('MSIE 7.0')) {
-                            let error = new Error();
-                            error.statusCode = 400;
-                            error.message = 'Please, update your browser';
-                            return next(error);
-                        }
-                        return next();
-                    }, (req, resp, next) => {
-                        // resp.contentType = 'application/json'
-                        // resp.status(400)
-                        // resp.setHeader('Content-Type', 'application/json')
-                        // resp.send({ message: 'hello' })
-                        resp.json({
-                            browser: req.userAgent(),
-                            method: req.method,
-                            url: req.href(),
-                            path: req.path(),
-                            query: req.query
-                        });
-                        return next();
-                    }
-                ]);
+                // Routes
+                for (let router of routers) {
+                    router.applyRoutes(this.application);
+                }
+                // Define a porta em que o Servidor responderá às requisições.
                 this.application.listen(environment_1.environment.server.port, () => {
                     resolve(this.application);
                 });
@@ -56,8 +38,8 @@ class Server {
     /**
      * Retorna a instância do Servidor.
      */
-    bootstrap() {
-        return this.initRoutes().then(() => this);
+    bootstrap(routers = []) {
+        return this.initRoutes(routers).then(() => this);
     }
 }
 exports.Server = Server;
