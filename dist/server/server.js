@@ -2,7 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const restify = require("restify");
 const environment_1 = require("../common/environment");
+/**
+ * Classe do Servidor.
+ *
+ * @author Leandro Câmara
+ */
 class Server {
+    /**
+     * Inicializa o Servidor e as Rotas da aplicação.
+     */
     initRoutes() {
         return new Promise((resolve, reject) => {
             try {
@@ -45,6 +53,9 @@ class Server {
             }
         });
     }
+    /**
+     * Retorna a instância do Servidor.
+     */
     bootstrap() {
         return this.initRoutes().then(() => this);
     }

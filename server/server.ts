@@ -2,10 +2,18 @@
 import * as restify from 'restify'
 import {environment} from '../common/environment'
 
+/**
+ * Classe do Servidor.
+ * 
+ * @author Leandro Câmara
+ */
 export class Server {
 
   application: restify.Server
 
+  /**
+   * Inicializa o Servidor e as Rotas da aplicação.
+   */
   initRoutes(): Promise<any>{
     return new Promise((resolve, reject) => {
       try {
@@ -53,6 +61,9 @@ export class Server {
     })
   }
 
+  /**
+   * Retorna a instância do Servidor.
+   */
   bootstrap(): Promise<Server>{
     return this.initRoutes().then(() => this)
   }
