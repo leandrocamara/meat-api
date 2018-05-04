@@ -24,6 +24,23 @@ class UsersRouter extends Router {
         resp.json(users)
         return next()
       })
+    })
+
+    /**
+     * Retorna o usuário conforme o "id" informado.
+     */
+    application.get('/users/:id', (req, resp, next) => {
+
+      User.findById(req.params.id).then(user => {
+
+        if (user) {
+          resp.json(user)
+          return next()
+        }
+
+        resp.send(404)
+        return next()
+      })
 
     })
 
