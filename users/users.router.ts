@@ -32,16 +32,25 @@ class UsersRouter extends Router {
     application.get('/users/:id', (req, resp, next) => {
 
       User.findById(req.params.id).then(user => {
-
         if (user) {
           resp.json(user)
           return next()
         }
-
         resp.send(404)
         return next()
       })
+    })
 
+    /**
+     * Salva um usuario.
+     */
+    application.post('/users', (req, resp, next) => {
+      let user = new User(req.body)
+      user.save().then(user => {
+        user.password = undefined
+        resp.json(user)
+        return next()
+      })
     })
 
   }

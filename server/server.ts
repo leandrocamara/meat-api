@@ -39,6 +39,7 @@ export class Server {
 
         // Instala plugins que serão utilizada por todas as rotas.
         this.application.use(restify.plugins.queryParser())
+        this.application.use(restify.plugins.bodyParser())
 
         // Routes
         for (let router of routers) {
