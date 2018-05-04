@@ -16,7 +16,7 @@ class UsersRouter extends router_1.Router {
          * Retorna todos os usuários.
          */
         application.get('/users', (req, resp, next) => {
-            users_model_1.User.findAll().then(users => {
+            users_model_1.User.find().then(users => {
                 resp.json(users);
                 return next();
             });

@@ -10,7 +10,7 @@ class UsersRouter extends Router {
 
   /**
    * Aplica as rotas do recurso "Users" ao Servidor.
-   * 
+   *
    * @param application
    */
   applyRoutes(application: restify.Server) {
@@ -20,7 +20,7 @@ class UsersRouter extends Router {
      */
     application.get('/users', (req, resp, next) => {
 
-      User.findAll().then(users => {
+      User.find().then(users => {
         resp.json(users)
         return next()
       })

@@ -1,38 +1,20 @@
 
-const users = [
-  { id: '1', name: 'Peter Parker', email: 'peter@marvel.com' },
-  { id: '2', name: 'Bruce Wayne', email: 'bruce@dc.com' },
-]
+import * as mongoose from 'mongoose'
 
 /**
- * User model.
+ * Schema: Define as propriedades (metadados) dos documentos.
  */
-export class User {
+const userSchema = new mongoose.Schema({
 
-  /**
-   * Retorna todos os usuários.
-   */
-  static findAll (): Promise<any[]> {
-    return Promise.resolve(users)
-  }
+  name: { type: String },
+  email: { type: String, unique: true },
+  password: { type: String, select: false }
 
-  /**
-   * Retorna o usuário conforme o "id" informado.
-   * 
-   * @param id
-   */
-  static findById (id: string): Promise<any> {
-    return new Promise(resolve => {
+})
 
-      const filtered = users.filter(user => user.id === id)
-      let user = undefined
-
-      if (filtered.length > 0) {
-        user = filtered[0]
-      }
-
-      resolve(user)
-    })
-  }
-
-}
+/**
+ * Exporta o Model "User", que faz uso do Schema "userSchema".
+ * O Model serve para manipular os Documentos da Collection.
+ * O Mongoose utilizará o nome do Model para definir o nome (no plural) da Collection.
+ */
+export const User = mongoose.model('User', userSchema)
