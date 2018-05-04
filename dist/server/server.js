@@ -13,6 +13,7 @@ class Server {
      * Inicializa a conexão com o banco de dados (MongoDB).
      */
     initializeDb() {
+        mongoose.Promise = global.Promise;
         return mongoose.connect(environment_1.environment.db.url, {
             useMongoClient: true
         });

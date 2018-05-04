@@ -7,7 +7,7 @@ import {Router} from '../common/router'
 
 /**
  * Classe do Servidor.
- * 
+ *
  * @author Leandro Câmara
  */
 export class Server {
@@ -17,7 +17,8 @@ export class Server {
   /**
    * Inicializa a conexão com o banco de dados (MongoDB).
    */
-  initializeDb() {
+  initializeDb(): mongoose.MongooseThenable {
+    (<any> mongoose).Promise = global.Promise
     return mongoose.connect(environment.db.url, {
       useMongoClient: true
     })
@@ -42,7 +43,7 @@ export class Server {
         // Routes
         for (let router of routers) {
           router.applyRoutes(this.application)
-        }        
+        }
 
         // Define a porta em que o Servidor responderá às requisições.
         this.application.listen(environment.server.port, () => {
@@ -61,7 +62,6 @@ export class Server {
   bootstrap(routers: Router[] = []): Promise<Server>{
     return this.initializeDb().then(() =>
            this.initRoutes(routers).then(() => this))
-    )
   }
 
 }

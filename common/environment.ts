@@ -1,7 +1,7 @@
 
 /**
  * Objeto de configuração do servidor.
- * 
+ *
  * @author Leandro Câmara
  */
 export const environment = {
