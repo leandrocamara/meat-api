@@ -1,5 +1,7 @@
 
 import * as restify from 'restify'
+import * as mongoose from 'mongoose'
+
 import {environment} from '../common/environment'
 import {Router} from '../common/router'
 
@@ -11,6 +13,15 @@ import {Router} from '../common/router'
 export class Server {
 
   application: restify.Server
+
+  /**
+   * Inicializa a conexão com o banco de dados (MongoDB).
+   */
+  initializeDb() {
+    return mongoose.connect(environment.db.url, {
+      useMongoClient: true
+    })
+  }
 
   /**
    * Inicializa o Servidor e as Rotas da aplicação.
@@ -48,7 +59,9 @@ export class Server {
    * Retorna a instância do Servidor.
    */
   bootstrap(routers: Router[] = []): Promise<Server>{
-    return this.initRoutes(routers).then(() => this)
+    return this.initializeDb().then(() =>
+           this.initRoutes(routers).then(() => this))
+    )
   }
 
 }

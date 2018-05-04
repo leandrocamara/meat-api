@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const restify = require("restify");
+const mongoose = require("mongoose");
 const environment_1 = require("../common/environment");
 /**
  * Classe do Servidor.
@@ -8,6 +9,14 @@ const environment_1 = require("../common/environment");
  * @author Leandro Câmara
  */
 class Server {
+    /**
+     * Inicializa a conexão com o banco de dados (MongoDB).
+     */
+    initializeDb() {
+        return mongoose.connect(environment_1.environment.db.url, {
+            useMongoClient: true
+        });
+    }
     /**
      * Inicializa o Servidor e as Rotas da aplicação.
      */
@@ -39,7 +48,7 @@ class Server {
      * Retorna a instância do Servidor.
      */
     bootstrap(routers = []) {
-        return this.initRoutes(routers).then(() => this);
+        return this.initializeDb().then(() => this.initRoutes(routers).then(() => this));
     }
 }
 exports.Server = Server;
