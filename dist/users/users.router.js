@@ -49,7 +49,7 @@ class UsersRouter extends router_1.Router {
          * Atualiza todos os dados de um usuário.
          */
         application.put('/users/:id', (req, resp, next) => {
-            let options = { overwrite: true };
+            const options = { overwrite: true };
             users_model_1.User.update({ _id: req.params.id }, req.body, options)
                 .exec().then(result => {
                 if (result.n) {
@@ -60,6 +60,20 @@ class UsersRouter extends router_1.Router {
                 }
             }).then(user => {
                 resp.json(user);
+                return next();
+            });
+        });
+        /**
+         * Atualizar os dados de um usuário de forma parcial.
+         */
+        application.patch('/users/:id', (req, resp, next) => {
+            const options = { new: true };
+            users_model_1.User.findByIdAndUpdate(req.params.id, req.body, options).then(user => {
+                if (user) {
+                    resp.json(user);
+                    return next();
+                }
+                resp.send(404);
                 return next();
             });
         });
