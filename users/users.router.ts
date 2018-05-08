@@ -53,6 +53,24 @@ class UsersRouter extends Router {
       })
     })
 
+    /**
+     * Atualiza todos os dados de um usuário.
+     */
+    application.put('/users/:id', (req, resp, next) => {
+      let options = { overwrite: true }
+      User.update({ _id: req.params.id }, req.body, options)
+          .exec().then(result => {
+            if (result.n) {
+              return User.findById(req.params.id)
+            } else {
+              resp.send(404)
+            }
+          }).then(user => {
+            resp.json(user)
+            return next()
+          })
+    })
+
   }
 
 }
