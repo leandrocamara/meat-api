@@ -58,17 +58,16 @@ class UsersRouter extends Router {
      */
     application.put('/users/:id', (req, resp, next) => {
       const options = { overwrite: true }
-      User.update({ _id: req.params.id }, req.body, options)
-          .exec().then(result => {
-            if (result.n) {
-              return User.findById(req.params.id)
-            } else {
-              resp.send(404)
-            }
-          }).then(user => {
-            resp.json(user)
-            return next()
-          })
+      User.update({ _id: req.params.id }, req.body, options).exec().then(result => {
+        if (result.n) {
+          return User.findById(req.params.id)
+        } else {
+          resp.send(404)
+        }
+      }).then(user => {
+        resp.json(user)
+        return next()
+      })
     })
 
     /**
@@ -82,6 +81,20 @@ class UsersRouter extends Router {
           return next()
         }
         resp.send(404)
+        return next()
+      })
+    })
+
+    /**
+     * Remove um usuário.
+     */
+    application.del('/users/:id', (req, resp, next) => {
+      User.remove({ _id: req.params.id }).exec().then((cmdResult: any) => {
+        if (cmdResult.result.n) {
+          resp.send(204)
+        } else {
+          resp.send(404)
+        }
         return next()
       })
     })

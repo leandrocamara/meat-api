@@ -50,8 +50,7 @@ class UsersRouter extends router_1.Router {
          */
         application.put('/users/:id', (req, resp, next) => {
             const options = { overwrite: true };
-            users_model_1.User.update({ _id: req.params.id }, req.body, options)
-                .exec().then(result => {
+            users_model_1.User.update({ _id: req.params.id }, req.body, options).exec().then(result => {
                 if (result.n) {
                     return users_model_1.User.findById(req.params.id);
                 }
@@ -74,6 +73,20 @@ class UsersRouter extends router_1.Router {
                     return next();
                 }
                 resp.send(404);
+                return next();
+            });
+        });
+        /**
+         * Remove um usuário.
+         */
+        application.del('/users/:id', (req, resp, next) => {
+            users_model_1.User.remove({ _id: req.params.id }).exec().then((cmdResult) => {
+                if (cmdResult.result.n) {
+                    resp.send(204);
+                }
+                else {
+                    resp.send(404);
+                }
                 return next();
             });
         });
