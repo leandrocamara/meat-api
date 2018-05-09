@@ -53,6 +53,9 @@ const userSchema = new mongoose.Schema({
 
 })
 
+/**
+ * Criação do Middleware responsável por criptografar a senha antes da execução do "save" no BD.
+ */
 userSchema.pre('save', function (next) {
   const user: User = this
 
@@ -61,8 +64,9 @@ userSchema.pre('save', function (next) {
   } else {
     bcrypt.hash(user.password, environment.security.saltRounds)
       .then(hash => {
-
-      })
+        user.password = hash
+        next()
+      }).catch(next)
   }
 })
 

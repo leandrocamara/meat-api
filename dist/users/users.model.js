@@ -39,13 +39,20 @@ const userSchema = new mongoose.Schema({
         }
     }
 });
+/**
+ * Criação do Middleware responsável por criptografar a senha antes da execução do "save" no BD.
+ */
 userSchema.pre('save', function (next) {
     const user = this;
     if (!user.isModified('password')) {
         next();
     }
     else {
-        bcrypt.hash(user.password, environment_1.environment.security.saltRounds);
+        bcrypt.hash(user.password, environment_1.environment.security.saltRounds)
+            .then(hash => {
+            user.password = hash;
+            next();
+        }).catch(next);
     }
 });
 /**
