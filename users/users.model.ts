@@ -1,5 +1,6 @@
 
 import * as mongoose from 'mongoose'
+import { validateCPF } from '../common/validators';
 
 /**
  * Interface que representa o Documento "User".
@@ -38,6 +39,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     enum: ['Male', 'Female']
+  },
+  cpf: {
+    type: String,
+    required: false,
+    validate: {
+      validator: validateCPF,
+      message: '{PATH}: Invalid CPF ({VALUE})'
+    }
   }
 
 })
