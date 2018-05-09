@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const restify_errors_1 = require("restify-errors");
 const mpContentType = 'application/merge-path+json';
 /**
  * Callback responsável por converter os dados (body) da requisição (PATCH) em JSON.
@@ -15,7 +16,7 @@ exports.mergePatchBodyParser = (req, resp, next) => {
             req.body = JSON.parse(req.body);
         }
         catch (error) {
-            return next(new Error(`Invalid content: ${error.message}`));
+            return next(new restify_errors_1.BadRequestError(`Invalid content: ${error.message}`));
         }
     }
     return next();
