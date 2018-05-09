@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const validators_1 = require("../common/validators");
+const bcrypt = require("bcrypt");
+const environment_1 = require("../common/environment");
 /**
  * Schema: Define as propriedades (metadados) dos documentos.
  */
@@ -35,6 +37,15 @@ const userSchema = new mongoose.Schema({
             validator: validators_1.validateCPF,
             message: '{PATH}: Invalid CPF ({VALUE})'
         }
+    }
+});
+userSchema.pre('save', function (next) {
+    const user = this;
+    if (!user.isModified('password')) {
+        next();
+    }
+    else {
+        bcrypt.hash(user.password, environment_1.environment.security.saltRounds);
     }
 });
 /**
