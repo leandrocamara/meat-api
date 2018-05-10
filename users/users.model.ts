@@ -1,18 +1,17 @@
 
 import * as mongoose from 'mongoose'
 import { validateCPF } from '../common/validators'
-import * as bcrypt from 'bcrypt'
-import { environment } from '../common/environment'
+import { saveMiddleware, updateMiddleware } from './users.middleware'
 
 /**
  * Interface que representa o Documento "User".
  */
 export interface User extends mongoose.Document {
-
   name: string,
   email: string,
-  password: string
-
+  password: string,
+  gender: string,
+  cpf: string
 }
 
 /**
@@ -54,21 +53,11 @@ const userSchema = new mongoose.Schema({
 })
 
 /**
- * Criação do Middleware responsável por criptografar a senha antes da execução do "save" no BD.
+ * Registra os Middlewares a serem executados antes das operações "Save" e "Update".
  */
-userSchema.pre('save', function (next) {
-  const user: User = this
-
-  if (!user.isModified('password')) {
-    next()
-  } else {
-    bcrypt.hash(user.password, environment.security.saltRounds)
-      .then(hash => {
-        user.password = hash
-        next()
-      }).catch(next)
-  }
-})
+userSchema.pre('save', saveMiddleware)
+userSchema.pre('findOneAndUpdate', updateMiddleware)
+userSchema.pre('update', updateMiddleware)
 
 /**
  * Exporta o Model "User", que faz uso do Schema "userSchema".

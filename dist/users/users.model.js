@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const validators_1 = require("../common/validators");
-const bcrypt = require("bcrypt");
-const environment_1 = require("../common/environment");
+const users_middleware_1 = require("./users.middleware");
 /**
  * Schema: Define as propriedades (metadados) dos documentos.
  */
@@ -40,21 +39,11 @@ const userSchema = new mongoose.Schema({
     }
 });
 /**
- * Criação do Middleware responsável por criptografar a senha antes da execução do "save" no BD.
+ * Registra os Middlewares a serem executados antes das operações "Save" e "Update".
  */
-userSchema.pre('save', function (next) {
-    const user = this;
-    if (!user.isModified('password')) {
-        next();
-    }
-    else {
-        bcrypt.hash(user.password, environment_1.environment.security.saltRounds)
-            .then(hash => {
-            user.password = hash;
-            next();
-        }).catch(next);
-    }
-});
+userSchema.pre('save', users_middleware_1.saveMiddleware);
+userSchema.pre('findOneAndUpdate', users_middleware_1.updateMiddleware);
+userSchema.pre('update', users_middleware_1.updateMiddleware);
 /**
  * Exporta o Model "User", que faz uso do Schema "userSchema".
  * O Model serve para manipular os Documentos da Collection.

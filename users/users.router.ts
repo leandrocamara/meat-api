@@ -1,8 +1,8 @@
 
-import {Router} from '../common/router'
+import { Router } from '../common/router'
 import * as restify from 'restify'
 import { NotFoundError } from 'restify-errors'
-import {User} from './users.model'
+import { User } from './users.model'
 
 /**
  * Rotas do recurso "User".
@@ -58,7 +58,7 @@ class UsersRouter extends Router {
      * Atualiza todos os dados de um usuário.
      */
     application.put('/users/:id', (req, resp, next) => {
-      const options = { overwrite: true }
+      const options = { runValidators: true, overwrite: true }
       User.update({ _id: req.params.id }, req.body, options).exec().then(result => {
         if (result.n) {
           return User.findById(req.params.id)
@@ -72,7 +72,7 @@ class UsersRouter extends Router {
      * Atualizar os dados de um usuário de forma parcial.
      */
     application.patch('/users/:id', (req, resp, next) => {
-      const options = { new: true }
+      const options = { runValidators: true, new: true }
       User.findByIdAndUpdate(req.params.id, req.body, options)
         .then(this.render(resp, next))
         .catch(next)
