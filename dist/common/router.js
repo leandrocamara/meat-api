@@ -24,6 +24,25 @@ class Router extends events_1.EventEmitter {
             return next();
         };
     }
+    /**
+     * Método genérico para renderizar a lista de "documentos" (resultante) na resposta da requisição.
+     *
+     * @param response
+     * @param next
+     */
+    renderAll(response, next) {
+        return (documents) => {
+            if (documents) {
+                documents.forEach(document => {
+                    this.emit('beforeRender', document);
+                });
+                response.json(documents);
+            }
+            else {
+                response.json([]);
+            }
+        };
+    }
 }
 exports.Router = Router;
 //# sourceMappingURL=router.js.map

@@ -1,7 +1,7 @@
 
 import * as restify from 'restify'
-import { EventEmitter } from 'events';
-import { NotFoundError } from 'restify-errors';
+import { EventEmitter } from 'events'
+import { NotFoundError } from 'restify-errors'
 
 /**
  * Classe abstrata, herdada por todas as "Routers".
@@ -21,7 +21,7 @@ export abstract class Router extends EventEmitter {
    * @param response
    * @param next
    */
-  render(response: restify.Response, next: restify.Next) {
+  render (response: restify.Response, next: restify.Next) {
     return (document) => {
       if (document) {
         this.emit('beforeRender', document)
@@ -32,4 +32,24 @@ export abstract class Router extends EventEmitter {
       return next()
     }
   }
+
+  /**
+   * Método genérico para renderizar a lista de "documentos" (resultante) na resposta da requisição.
+   *
+   * @param response
+   * @param next
+   */
+  renderAll (response: restify.Response, next: restify.Next) {
+    return (documents: any[]) => {
+      if (documents) {
+        documents.forEach(document => {
+          this.emit('beforeRender', document)
+        })
+        response.json(documents)
+      } else {
+        response.json([])
+      }
+    }
+  }
+
 }

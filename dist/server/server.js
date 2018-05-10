@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const restify = require("restify");
 const mongoose = require("mongoose");
+const error_handler_1 = require("./error.handler");
 const environment_1 = require("../common/environment");
 const merge_patch_parser_1 = require("./merge-patch.parser");
-const error_handler_1 = require("./error.handler");
 /**
  * Classe do Servidor.
  *
