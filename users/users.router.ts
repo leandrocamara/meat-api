@@ -8,6 +8,9 @@ import { ModelRouter } from '../common/model-router'
  */
 class UsersRouter extends ModelRouter<User> {
 
+  /**
+   * Método construtor.
+   */
   constructor () {
     super(User)
     this.on('beforeRender', document => {
@@ -21,7 +24,7 @@ class UsersRouter extends ModelRouter<User> {
    *
    * @param application
    */
-  applyRoutes(application: restify.Server) {
+  applyRoutes (application: restify.Server) {
 
     application.get('/users', this.findAll)
     application.get('/users/:id', [this.validateId, this.findById])

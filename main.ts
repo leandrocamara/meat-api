@@ -1,11 +1,15 @@
 
 import { Server } from './server/server'
 import { usersRouter } from './users/users.router'
+import { restaurantsRouter } from './restaurants/restaurants.router'
 
 const server = new Server()
 
 // Instancia o Servidor.
-server.bootstrap([usersRouter]).then(server => {
+server.bootstrap([
+  usersRouter,
+  restaurantsRouter
+]).then(server => {
 
   console.log('Server is listening on: ', server.application.address())
 

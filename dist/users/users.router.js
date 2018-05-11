@@ -6,6 +6,9 @@ const model_router_1 = require("../common/model-router");
  * Rotas do recurso "User".
  */
 class UsersRouter extends model_router_1.ModelRouter {
+    /**
+     * Método construtor.
+     */
     constructor() {
         super(users_model_1.User);
         this.on('beforeRender', document => {
