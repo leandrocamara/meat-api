@@ -15,6 +15,13 @@ export interface User extends mongoose.Document {
 }
 
 /**
+ * Adiciona novos métodos ao modelo "User".
+ */
+export interface UserModel extends mongoose.Model<User> {
+  findByEmail(email: string): Promise<User>
+}
+
+/**
  * Schema: Define as propriedades (metadados) dos documentos.
  */
 const userSchema = new mongoose.Schema({
@@ -52,6 +59,10 @@ const userSchema = new mongoose.Schema({
 
 })
 
+userSchema.statics.findByEmail = function (email: string) {
+  return this.findOne({ email }) // { email: email }
+}
+
 /**
  * Registra os Middlewares a serem executados antes das operações "Save" e "Update".
  */
@@ -64,4 +75,4 @@ userSchema.pre('update', updateMiddleware)
  * O Model serve para manipular os Documentos da Collection.
  * O Mongoose utilizará o nome do Model para definir o nome (no plural) da Collection.
  */
-export const User = mongoose.model<User>('User', userSchema)
+export const User = mongoose.model<User, UserModel>('User', userSchema)

@@ -38,6 +38,9 @@ const userSchema = new mongoose.Schema({
         }
     }
 });
+userSchema.statics.findByEmail = function (email) {
+    return this.findOne({ email }); // { email: email }
+};
 /**
  * Registra os Middlewares a serem executados antes das operações "Save" e "Update".
  */
