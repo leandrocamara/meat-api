@@ -1,7 +1,7 @@
 
 import * as mongoose from 'mongoose'
-import { User } from '../../users/users.model'
-import { Restaurant } from '../../restaurants/restaurants.model'
+import { User } from '../users/users.model'
+import { Restaurant } from '../restaurants/restaurants.model'
 
 /**
  * Interface que representa o Documento "Review".
@@ -48,4 +48,4 @@ const reviewSchema = new mongoose.Schema({
  * O Model serve para manipular os Documentos da Collection.
  * O Mongoose utilizará o nome do Model para definir o nome (no plural) da Collection.
  */
-const Review = mongoose.model<Review>('Review', reviewSchema)
+export const Review = mongoose.model<Review>('Review', reviewSchema)

@@ -38,7 +38,7 @@ class ModelRouter extends router_1.Router {
          * Retorna o documento conforme o "id" informado.
          */
         this.findById = (req, resp, next) => {
-            this.model.findById(req.params.id)
+            this.prepareOne(this.model.findById(req.params.id))
                 .then(this.render(resp, next))
                 .catch(next);
         };
@@ -88,6 +88,14 @@ class ModelRouter extends router_1.Router {
                 return next();
             }).catch(next);
         };
+    }
+    /**
+     * Prepara a consulta antes de realizar a operação no BD.
+     *
+     * @param query
+     */
+    prepareOne(query) {
+        return query;
     }
 }
 exports.ModelRouter = ModelRouter;

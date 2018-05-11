@@ -2,7 +2,7 @@
 import * as restify from 'restify'
 import { Restaurant } from './restaurants.model'
 import { ModelRouter } from '../common/model-router'
-import { NotFoundError } from 'restify-errors';
+import { NotFoundError } from 'restify-errors'
 
 /**
  * Rotas do recurso "Restaurant".

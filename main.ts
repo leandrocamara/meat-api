@@ -1,6 +1,7 @@
 
 import { Server } from './server/server'
 import { usersRouter } from './users/users.router'
+import { reviewsRouter } from './reviews/reviews.router'
 import { restaurantsRouter } from './restaurants/restaurants.router'
 
 const server = new Server()
@@ -8,6 +9,7 @@ const server = new Server()
 // Instancia o Servidor.
 server.bootstrap([
   usersRouter,
+  reviewsRouter,
   restaurantsRouter
 ]).then(server => {
 

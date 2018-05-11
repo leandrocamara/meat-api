@@ -18,6 +18,15 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
   }
 
   /**
+   * Prepara a consulta antes de realizar a operação no BD.
+   *
+   * @param query
+   */
+  protected prepareOne (query: mongoose.DocumentQuery<D, D>): mongoose.DocumentQuery<D, D> {
+    return query
+  }
+
+  /**
    * Verifica se o "id" informado é válido.
    */
   validateId = (req, resp, next) => {
@@ -41,7 +50,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
    * Retorna o documento conforme o "id" informado.
    */
   findById = (req, resp, next) => {
-    this.model.findById(req.params.id)
+    this.prepareOne(this.model.findById(req.params.id))
       .then(this.render(resp, next))
       .catch(next)
   }
