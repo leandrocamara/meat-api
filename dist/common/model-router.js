@@ -88,6 +88,7 @@ class ModelRouter extends router_1.Router {
                 return next();
             }).catch(next);
         };
+        this.basePath = `/${model.collection.name}`;
     }
     /**
      * Prepara a consulta antes de realizar a operação no BD.
@@ -96,6 +97,16 @@ class ModelRouter extends router_1.Router {
      */
     prepareOne(query) {
         return query;
+    }
+    /**
+     * Método responsável por encapsular os dados de hypermedia do recurso.
+     *
+     * @param document
+     */
+    envelope(document) {
+        let resource = Object.assign({ _links: {} }, document.toJSON());
+        resource._links.self = `${this.basePath}/${resource._id}`;
+        return resource;
     }
 }
 exports.ModelRouter = ModelRouter;

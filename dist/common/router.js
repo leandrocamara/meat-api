@@ -7,6 +7,14 @@ const restify_errors_1 = require("restify-errors");
  */
 class Router extends events_1.EventEmitter {
     /**
+     * Método responsável por encapsular os dados de hypermedia.
+     *
+     * @param document
+     */
+    envelope(document) {
+        return document;
+    }
+    /**
      * Método genérico para renderizar o "documento" (resultante) na resposta da requisição.
      *
      * @param response
@@ -16,7 +24,7 @@ class Router extends events_1.EventEmitter {
         return (document) => {
             if (document) {
                 this.emit('beforeRender', document);
-                response.json(document);
+                response.json(this.envelope(document));
             }
             else {
                 throw new restify_errors_1.NotFoundError('Documento não encontrado.');
@@ -33,14 +41,16 @@ class Router extends events_1.EventEmitter {
     renderAll(response, next) {
         return (documents) => {
             if (documents) {
-                documents.forEach(document => {
+                documents.forEach((document, index, array) => {
                     this.emit('beforeRender', document);
+                    array[index] = this.envelope(document);
                 });
                 response.json(documents);
             }
             else {
                 response.json([]);
             }
+            return next();
         };
     }
 }

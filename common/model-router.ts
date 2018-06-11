@@ -9,12 +9,18 @@ import { NotFoundError } from 'restify-errors'
 export abstract class ModelRouter<D extends mongoose.Document> extends Router {
 
   /**
+   * Propriedade para armazenar o caminho (URL) do recurso.
+   */
+  basePath: string
+
+  /**
    * Define o modelo a ser utilizado pelo métodos genéricos.
    *
    * @param model
    */
   constructor (protected model: mongoose.Model<D>) {
     super()
+    this.basePath = `/${model.collection.name}`
   }
 
   /**
@@ -24,6 +30,17 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
    */
   protected prepareOne (query: mongoose.DocumentQuery<D, D>): mongoose.DocumentQuery<D, D> {
     return query
+  }
+
+  /**
+   * Método responsável por encapsular os dados de hypermedia do recurso.
+   *
+   * @param document
+   */
+  envelope (document: any): any {
+    let resource = Object.assign({ _links: {} }, document.toJSON())
+    resource._links.self = `${this.basePath}/${resource._id}`
+    return resource
   }
 
   /**
